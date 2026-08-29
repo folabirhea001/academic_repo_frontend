@@ -86,3 +86,5 @@ const adminCreateQuiz     = d     => apiFetch('/admin/quiz/create', 'POST', d);
 const adminGenerateQuiz   = d     => apiFetch('/admin/quiz/generate', 'POST', d);
 const adminGetQuizzes     = ()    => apiFetch('/admin/quizzes');
 const adminGetStudents    = ()    => apiFetch('/admin/students');
+const adminGetSingleStudent = id    => apiFetch(`/admin/students/${id}`);
+const deleteStudent        = id    => apiFetch(`/admin/students/${id}`, 'DELETE');
