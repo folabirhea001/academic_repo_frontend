@@ -2,7 +2,7 @@
 // SMART Academic Repository — API Layer
 // ================================================
 // const API = 'http://localhost:5000/api';
-const API       = 'https://academic-repo-api-1.onrender.com/api';
+const API       = 'https://academic-repo-api.onrender.com/api';
 
 const getToken = () => localStorage.getItem('token');
 const getUser  = () => JSON.parse(localStorage.getItem('user') || '{}');
