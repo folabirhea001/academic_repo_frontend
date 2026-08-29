@@ -32,7 +32,13 @@ const requireAdmin = () => {
 const apiFetch = async (path, method = 'GET', body = null, auth = true) => {
   const headers = { 'Content-Type': 'application/json' };
   if (auth) headers['Authorization'] = `Bearer ${getToken()}`;
-  const opts = { method, headers };
+  
+  const opts = { 
+    method, 
+    headers,
+    credentials: 'include' // ⚠️ CRITICAL FIX: Matches backend credentials: true
+  };
+  
   if (body) opts.body = JSON.stringify(body);
   const res = await fetch(`${API}${path}`, opts);
   const data = await res.json();
@@ -44,7 +50,8 @@ const apiUpload = async (path, formData) => {
   const res = await fetch(`${API}${path}`, {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${getToken()}` },
-    body: formData
+    body: formData,
+    credentials: 'include' // ⚠️ CRITICAL FIX: Matches backend credentials: true
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.message || 'Upload failed');
