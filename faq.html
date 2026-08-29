@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Frequently Asked Questions - AI Academic Repository</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light-purple">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-purple shadow sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">
+            AI Academic Repository
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                title="Toggle navigation"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                <li class="nav-item"><a class="nav-link active" href="faq.html">FAQ</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- FAQ Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="dashboard-card">
+            <div class="text-center mb-5">
+                <h1 class="text-purple fw-bold">Frequently Asked Questions</h1>
+                <p class="text-muted">
+                    Answers to common questions about the platform.
+                </p>
+            </div>
+
+            <div class="accordion" id="faqAccordion">
+
+                <!-- Question 1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="q1">
+                        <button class="accordion-button"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#a1">
+                            How does the AI recommendation system work?
+                        </button>
+                    </h2>
+                    <div id="a1"
+                         class="accordion-collapse collapse show"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            The system analyzes your academic level, search history,
+                            and self-test performance to recommend relevant study
+                            materials and past examination questions.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="q2">
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#a2">
+                            What is Explainable AI (XAI)?
+                        </button>
+                    </h2>
+                    <div id="a2"
+                         class="accordion-collapse collapse"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Explainable AI shows the reasons behind each
+                            recommendation, helping students understand why
+                            specific materials are suggested.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="q3">
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#a3">
+                            How do I take a self-test?
+                        </button>
+                    </h2>
+                    <div id="a3"
+                         class="accordion-collapse collapse"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Navigate to the Self-Test page from your dashboard,
+                            answer the quiz questions, and submit to view your score
+                            and recommended resources.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="q4">
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#a4">
+                            Can administrators upload materials?
+                        </button>
+                    </h2>
+                    <div id="a4"
+                         class="accordion-collapse collapse"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes. Authorized administrators can upload lecture notes,
+                            textbooks, tutorials, and past questions through the
+                            Admin Dashboard.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="q5">
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#a5">
+                            Is my personal information secure?
+                        </button>
+                    </h2>
+                    <div id="a5"
+                         class="accordion-collapse collapse"
+                         data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Yes. Student data is protected using secure
+                            authentication and privacy controls in accordance with
+                            best practices for web applications.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer text-center py-4 mt-5">
+    <p class="mb-0">© 2026 AI Academic Repository</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="api.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

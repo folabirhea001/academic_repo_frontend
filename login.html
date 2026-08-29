@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — SMART Academic Repository</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="s-auth">
+  <div class="s-auth-card">
+    <div class="s-auth-logo"><img src="/frontend/logo.png" alt="logo" width="50"></div>
+    <h4 class="fw-bold" style="color:#2d1b5e; text-align: center;">Welcome Back</h4>
+    <p class="mb-4" style="color:#7c6fa0;font-size:0.88rem; text-align: center;">Login to access your academic dashboard</p>
+
+    <form id="loginForm" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div class="mb-3 justify-content-center">
+        <label class="form-label">Matric Number</label>
+        <div style="position:relative;">
+          <i class="bi bi-person" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#7c6fa0;"></i>
+          <input type="text" id="matricNo" class="form-control" style="padding-left:38px !important;" placeholder="e.g. 2021/1/84096CF" required>
+        </div>
+      </div>
+      <div class="mb-5">
+        <label class="form-label">Password</label>
+        <div style="position:relative;">
+          <i class="bi bi-lock" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#7c6fa0;"></i>
+          <input type="password" id="password" class="form-control" style="padding-left:38px !important;" placeholder="Enter your password" required>
+        </div>
+      </div>
+      <button type="submit" id="loginBtn" class="s-btn w-100" style="justify-content:center;padding:12px; margin-top: 12px;">
+        <i class="bi bi-box-arrow-in-right"></i> Login
+      </button>
+    </form>
+
+    <p class="text-center mt-3 mb-1" style="font-size:0.86rem;color:#7c6fa0;">
+      Don't have an account? <a href="register.html" style="color:#6f42c1;font-weight:700;text-decoration:none;">Register here</a>
+    </p>
+    <hr style="border-color:#e0d8f5;">
+    <p class="text-center mb-0" style="font-size:0.82rem;">
+      <a href="admin-login.html" style="color:#9085a0;text-decoration:none;"><i class="bi bi-shield-lock me-1"></i>Admin Login</a>
+    </p>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="api.js"></script>
+<script src="app.js"></script>
+<script>
+if (getToken() && getRole() === 'student') window.location.href = 'student-dashboard.html';
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+  try {
+    const data = await loginStudent({ matricNo: document.getElementById('matricNo').value.trim(), password: document.getElementById('password').value });
+    setSession(data.token, data.student, 'student');
+    showAlert('Login successful!');
+    setTimeout(() => window.location.href = 'student-dashboard.html', 1200);
+  } catch (err) { showAlert(err.message, 'danger'); btn.disabled = false; btn.innerHTML = orig; }
+});
+</script>
+</body>
+</html>

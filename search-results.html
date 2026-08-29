@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Materials — SMART Academic Repository</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="s-nav">
+  <button title="Button Toggler" class="s-toggler d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#mob-sb"><i class="bi bi-list"></i></button>
+  <a href="index.html" class="s-brand"><img src="/frontend/logo.png" alt="logo" width="50"><span class="d-none d-sm-inline">SMART Academic Repository</span><span class="d-sm-none">SMART Repo</span></a>
+  <div class="s-right">
+    <span class="s-user d-none d-md-inline"><i class="bi bi-person-circle me-1"></i><span id="navName"></span></span>
+    <button class="s-btn-nav" onclick="logout()"><i class="bi bi-box-arrow-right"></i><span class="d-none d-sm-inline ms-1">Logout</span></button>
+  </div>
+</nav>
+
+<div class="offcanvas offcanvas-start s-offcanvas" tabindex="-1" id="mob-sb">
+  <div class="offcanvas-header"><h6 class="text-white fw-bold mb-0"><i class="bi bi-mortarboard-fill me-2"></i>Menu</h6><button title="Button close" class="btn-close" data-bs-dismiss="offcanvas"></button></div>
+  <div class="offcanvas-body p-2">
+    <span class="s-label">Main</span>
+    <a href="student-dashboard.html" class="s-link"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <a href="search-results.html" class="s-link active"><i class="bi bi-search"></i>Browse Materials</a>
+    <span class="s-label">AI Tools</span>
+    <a href="recommendation.html" class="s-link"><i class="bi bi-stars"></i>AI Recommendations</a>
+    <span class="s-label">Assessments</span>
+    <a href="self-test.html" class="s-link"><i class="bi bi-pencil-square"></i>Self-Test Quiz</a>
+    <span class="s-label">Account</span>
+    <a href="profile.html" class="s-link"><i class="bi bi-person-circle"></i>My Profile</a>
+    <a href="#" onclick="logout()" class="s-link s-danger"><i class="bi bi-box-arrow-right"></i>Logout</a>
+  </div>
+</div>
+
+<div class="s-layout">
+  <aside class="s-sidebar">
+    <span class="s-label">Main</span>
+    <a href="student-dashboard.html" class="s-link"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <a href="search-results.html" class="s-link active"><i class="bi bi-search"></i>Browse Materials</a>
+    <span class="s-label">AI Tools</span>
+    <a href="recommendation.html" class="s-link"><i class="bi bi-stars"></i>AI Recommendations</a>
+    <span class="s-label">Assessments</span>
+    <a href="self-test.html" class="s-link"><i class="bi bi-pencil-square"></i>Self-Test Quiz</a>
+    <span class="s-label">Account</span>
+    <a href="profile.html" class="s-link"><i class="bi bi-person-circle"></i>My Profile</a>
+    <a href="#" onclick="logout()" class="s-link s-danger"><i class="bi bi-box-arrow-right"></i>Logout</a>
+  </aside>
+
+  <main class="s-main">
+
+    <div class="mb-4">
+      <h5 class="fw-bold mb-1" style="color:#2d1b5e;">Browse Academic Materials</h5>
+      <p style="color:#7c6fa0;font-size:0.88rem;margin:0;">Search lecture notes, textbooks and past questions.</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="s-card mb-3">
+      <div class="row g-2">
+        <div class="col-12 col-md-5">
+          <label class="form-label">Search</label>
+          <div style="position:relative;">
+            <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#7c6fa0;font-size:0.85rem;"></i>
+            <input type="text" id="searchInput" class="form-control" style="padding-left:34px !important;" placeholder="Course code, title, topic...">
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <label class="form-label">Level</label>
+          <select title="Level Selection" id="levelFilter" class="form-select">
+            <option value="">All</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="form-label">Category</label>
+          <select title="form selection" id="catFilter" class="form-select">
+            <option value="">All Types</option>
+            <option value="past_question">Past Questions</option>
+            <option value="lecture_note">Lecture Notes</option>
+            <option value="textbook">Textbooks</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-2 d-flex align-items-end">
+          <button onclick="doSearch()" class="s-btn w-100" style="justify-content:center;">
+            <i class="bi bi-search"></i> Search
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="s-card">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h6 class="fw-bold mb-0" style="color:#2d1b5e;">Results <span id="rCount" style="color:#7c6fa0;font-weight:500;font-size:0.85rem;"></span></h6>
+        <div class="d-flex gap-1">
+          <button id="btnList" onclick="setView('list')" class="s-btn s-btn-sm" title="List view"><i class="bi bi-list-ul"></i></button>
+          <button id="btnGrid" onclick="setView('grid')" class="s-btn-out" style="padding:6px 12px;font-size:0.8rem;" title="Grid view"><i class="bi bi-grid-3x3-gap"></i></button>
+        </div>
+      </div>
+      <div id="results"><div class="text-center py-4"><div class="spinner-border spinner-border-sm s-spin"></div><p style="color:#7c6fa0;margin-top:10px;font-size:0.85rem;">Loading materials...</p></div></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="api.js"></script>
+<script src="app.js"></script>
+<script>
+requireStudent();
+let view = 'list', lastMats = [];
+document.getElementById('navName').textContent = getUser().fullName?.split(' ')[0] || 'Student';
+
+const cc = c => c==='past_question'?'#2563eb':c==='lecture_note'?'#16a34a':c==='textbook'?'#d97706':'#6f42c1';
+const ci = c => c==='past_question'?'bi-file-earmark-check':c==='lecture_note'?'bi-journal-text':c==='textbook'?'bi-book':'bi-file-earmark';
+
+function setView(v) {
+  view = v;
+  document.getElementById('btnList').className = v==='list' ? 's-btn s-btn-sm' : 's-btn-out';
+  document.getElementById('btnList').style = v==='list' ? '' : 'padding:6px 12px;font-size:0.8rem;';
+  document.getElementById('btnGrid').className = v==='grid' ? 's-btn s-btn-sm' : 's-btn-out';
+  document.getElementById('btnGrid').style = v==='grid' ? '' : 'padding:6px 12px;font-size:0.8rem;';
+  render(lastMats);
+}
+
+function render(mats) {
+  lastMats = mats;
+  const el = document.getElementById('results');
+  document.getElementById('rCount').textContent = mats.length ? `(${mats.length} found)` : '';
+  if (!mats.length) { el.innerHTML = '<div class="s-empty"><i class="bi bi-search"></i><p>No materials found. Try different filters.</p></div>'; return; }
+
+  if (view === 'grid') {
+    el.innerHTML = '<div class="row g-3">' + mats.map(m => {
+      const c = cc(m.category), ic = ci(m.category);
+      return `<div class="col-12 col-sm-6 col-xl-4"><div class="s-card mb-0 h-100" style="cursor:pointer;" onmouseover="this.style.borderColor='#6f42c1'" onmouseout="this.style.borderColor='#e0d8f5'">
+        <div style="width:44px;height:44px;background:${c}18;border-radius:12px;display:flex;align-items:center;justify-content:center;color:${c};font-size:1.2rem;margin-bottom:12px;"><i class="bi ${ic}"></i></div>
+        <div class="fw-bold mb-1 text-truncate" style="font-size:0.88rem;" title="${m.title}">${m.title}</div>
+        <div style="color:#7c6fa0;font-size:0.78rem;margin-bottom:12px;">${m.course} • ${m.level} Level</div>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="s-tag" style="background:${c}15;color:${c};border-color:${c}30;font-size:0.72rem;">${m.category.replace('_',' ')}</span>
+          <a href="http://localhost:5000/uploads/${m.fileUrl}" target="_blank" onclick="logDownload('${m._id}')" style="color:${c};font-size:0.8rem;font-weight:700;text-decoration:none;">Open <i class="bi bi-box-arrow-up-right"></i></a>
+        </div>
+      </div></div>`;
+    }).join('') + '</div>';
+  } else {
+    el.innerHTML = mats.map(m => {
+      const c = cc(m.category), ic = ci(m.category);
+      return `<div class="d-flex align-items-start gap-3 py-3" style="border-bottom:1px solid #f5f0ff;">
+        <div style="width:44px;height:44px;background:${c}18;border-radius:12px;display:flex;align-items:center;justify-content:center;color:${c};font-size:1.2rem;flex-shrink:0;"><i class="bi ${ic}"></i></div>
+        <div style="flex:1;min-width:0;">
+          <div class="fw-bold mb-0" style="font-size:0.9rem;">${m.title}</div>
+          <div style="color:#7c6fa0;font-size:0.8rem;">${m.course} — ${m.courseName} • ${m.level} Level</div>
+          ${m.description ? `<div style="color:#9085a0;font-size:0.78rem;margin-top:2px;">${m.description}</div>` : ''}
+        </div>
+        <div class="d-flex flex-column flex-sm-row align-items-end align-items-sm-center gap-2 flex-shrink-0">
+          <span class="s-tag d-none d-sm-inline" style="background:${c}15;color:${c};border-color:${c}30;">${m.category.replace('_',' ')}</span>
+          <a href="http://localhost:5000/uploads/${m.fileUrl}" target="_blank" onclick="logDownload('${m._id}')" class="s-btn s-btn-sm" style="white-space:nowrap;"><i class="bi bi-download me-1"></i>Open</a>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+async function doSearch() {
+  const f = {};
+  const s = document.getElementById('searchInput').value.trim();
+  const l = document.getElementById('levelFilter').value;
+  const c = document.getElementById('catFilter').value;
+  if (s) f.search = s; if (l) f.level = l; if (c) f.category = c;
+  document.getElementById('results').innerHTML = '<div class="text-center py-4"><div class="spinner-border spinner-border-sm s-spin"></div></div>';
+  try { const d = await getMaterials(f); render(d.materials); } catch (e) { showAlert(e.message, 'danger'); }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const saved = localStorage.getItem('searchQuery');
+  if (saved) { document.getElementById('searchInput').value = saved; localStorage.removeItem('searchQuery'); }
+  try { const d = await getMaterials(); render(d.materials); } catch (e) { showAlert(e.message, 'danger'); }
+});
+document.getElementById('searchInput').addEventListener('keypress', e => { if (e.key === 'Enter') doSearch(); });
+</script>
+</body>
+</html>

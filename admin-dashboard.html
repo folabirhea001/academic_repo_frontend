@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — SMART Academic Repository</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .tab-pill { background:transparent;border:none;border-radius:10px;padding:9px 16px;font-size:0.86rem;font-weight:600;color:#7c6fa0;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:7px; }
+    .tab-pill.on { background:#6f42c1;color:white;box-shadow:0 4px 12px rgba(111,66,193,0.3); }
+    .tab-pill:hover:not(.on) { background:#f0ebff;color:#6f42c1; }
+    .tab-bar { background:#f0ebff;border-radius:12px;padding:5px;display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap; }
+    .preview-q { background:#f7f4ff;border:1.5px solid #e0d8f5;border-radius:10px;padding:14px;margin-bottom:10px; }
+    .preview-q .qnum { font-size:0.7rem;font-weight:700;color:#6f42c1;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px; }
+    .preview-q .qtext { font-weight:600;color:#1e1233;margin-bottom:10px;font-size:0.88rem; }
+    .opt-badge { display:inline-block;padding:4px 10px;border-radius:7px;font-size:0.78rem;margin:2px;background:#f0ebff;color:#4b2e83;border:1px solid #e0d8f5; }
+    .opt-badge.correct { background:#dcfce7;color:#16a34a;border-color:#bbf7d0;font-weight:700; }
+    .mat-row { display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f5f0ff; }
+    .mat-row:last-child { border-bottom:none; }
+    .ftype { padding:2px 8px;border-radius:6px;font-size:0.7rem;font-weight:700;text-transform:uppercase; }
+    .ftype-pdf{background:#fee2e2;color:#dc3545} .ftype-docx{background:#dce8ff;color:#2563eb}
+    .ftype-pptx{background:#fff0dc;color:#d97706} .ftype-img{background:#dcfce7;color:#16a34a}
+    .ai-pill { background:linear-gradient(135deg,#6f42c1,#e91e8c);color:white;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:20px; }
+    .quiz-row { display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-radius:10px;background:#f7f4ff;border:1.5px solid #e0d8f5;margin-bottom:8px;gap:12px;flex-wrap:wrap; }
+    .gen-ring { width:52px;height:52px;border:4px solid #f0ebff;border-top-color:#6f42c1;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px; }
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+
+<nav class="s-nav">
+  <button title="Button Toggler" class="s-toggler d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#mob-sb"><i class="bi bi-list"></i></button>
+  <a href="admin-dashboard.html" class="s-brand"><img src="/frontend/logo.png" alt="logo" width="50"><span class="d-none d-sm-inline">Academic Repository — Admin</span><span class="d-sm-none">Admin</span></a>
+  <div class="s-right">
+    <span class="s-user d-none d-md-inline"><i class="bi bi-shield-check me-1"></i>Admin Panel</span>
+    <button class="s-btn-nav" onclick="logout()"><i class="bi bi-box-arrow-right"></i><span class="d-none d-sm-inline ms-1">Logout</span></button>
+  </div>
+</nav>
+
+<div class="offcanvas offcanvas-start s-offcanvas" tabindex="-1" id="mob-sb">
+  <div class="offcanvas-header"><h6 class="text-white fw-bold mb-0"><i class="bi bi-shield-check me-2"></i>Admin Menu</h6><button title="Button Close" class="btn-close" data-bs-dismiss="offcanvas"></button></div>
+  <div class="offcanvas-body p-2">
+    <span class="s-label">Overview</span>
+    <a href="#" onclick="sw('overview');return false;" class="s-link active" id="nl-overview"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <span class="s-label">Content</span>
+    <a href="#" onclick="sw('upload');return false;" class="s-link" id="nl-upload"><i class="bi bi-cloud-upload"></i>Upload Material</a>
+    <a href="#" onclick="sw('materials');return false;" class="s-link" id="nl-materials"><i class="bi bi-folder2-open"></i>All Materials</a>
+    <span class="s-label">Quizzes</span>
+    <a href="#" onclick="sw('generate');return false;" class="s-link" id="nl-generate"><i class="bi bi-stars"></i>Generate Quiz (AI)</a>
+    <a href="#" onclick="sw('quizzes');return false;" class="s-link" id="nl-quizzes"><i class="bi bi-journal-check"></i>All Quizzes</a>
+    <span class="s-label">Users</span>
+    <a href="admin-students.html" class="s-link"><i class="bi bi-people"></i>Students</a>
+    <a href="#" onclick="logout()" class="s-link s-danger" style="margin-top:20px;"><i class="bi bi-box-arrow-right"></i>Logout</a>
+  </div>
+</div>
+
+<div class="s-layout">
+
+  <!-- Desktop Sidebar -->
+  <aside class="s-sidebar">
+    <span class="s-label">Overview</span>
+    <a href="#" onclick="sw('overview');return false;" class="s-link active" id="sl-overview"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <span class="s-label">Content</span>
+    <a href="#" onclick="sw('upload');return false;" class="s-link" id="sl-upload"><i class="bi bi-cloud-upload"></i>Upload Material</a>
+    <a href="#" onclick="sw('materials');return false;" class="s-link" id="sl-materials"><i class="bi bi-folder2-open"></i>All Materials</a>
+    <span class="s-label">Quizzes</span>
+    <a href="#" onclick="sw('generate');return false;" class="s-link" id="sl-generate"><i class="bi bi-stars"></i>Generate Quiz (AI)</a>
+    <a href="#" onclick="sw('quizzes');return false;" class="s-link" id="sl-quizzes"><i class="bi bi-journal-check"></i>All Quizzes</a>
+    <span class="s-label">Users</span>
+    <a href="admin-students.html" class="s-link"><i class="bi bi-people"></i>Students</a>
+    <a href="#" onclick="logout()" class="s-link s-danger" style="margin-top:20px;"><i class="bi bi-box-arrow-right"></i>Logout</a>
+  </aside>
+
+  <main class="s-main">
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <div id="t-overview">
+      <div class="mb-4">
+        <h5 class="fw-bold mb-1" style="color:#2d1b5e;">Welcome back, Admin 👋</h5>
+        <p style="color:#7c6fa0;font-size:0.88rem;margin:0;">Here's what's happening in your repository today.</p>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3"><div class="s-stat"><div class="si"><i class="bi bi-file-earmark-text"></i></div><h3 id="ovRes">--</h3><p>Resources</p></div></div>
+        <div class="col-6 col-md-3"><div class="s-stat"><div class="si"><i class="bi bi-people"></i></div><h3 id="ovStu">--</h3><p>Students</p></div></div>
+        <div class="col-6 col-md-3"><div class="s-stat"><div class="si"><i class="bi bi-patch-question"></i></div><h3 id="ovQuiz">--</h3><p>Quizzes</p></div></div>
+        <div class="col-6 col-md-3"><div class="s-stat" style="background:linear-gradient(135deg,#16a34a,#22c55e);"><div class="si"><i class="bi bi-activity"></i></div><h3>Live</h3><p>Status</p></div></div>
+      </div>
+      <div class="s-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="fw-bold mb-0" style="color:#2d1b5e;">Recent Uploads</h6>
+          <button onclick="sw('materials')" class="s-btn-out" style="padding:6px 14px;font-size:0.82rem;">View All <i class="bi bi-arrow-right ms-1"></i></button>
+        </div>
+        <div id="ovRecent"><div class="text-center py-3"><div class="spinner-border spinner-border-sm s-spin"></div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ UPLOAD ═══ -->
+    <div id="t-upload" style="display:none;">
+      <div class="mb-4"><h5 class="fw-bold mb-1" style="color:#2d1b5e;">Upload Academic Material</h5><p style="color:#7c6fa0;font-size:0.88rem;margin:0;">Add lecture notes, textbooks, past questions and resources.</p></div>
+      <div class="s-card">
+        <form id="uploadForm">
+          <div class="row g-3">
+            <div class="col-12 col-md-8">
+              <label class="form-label">Material Title *</label>
+              <input type="text" id="uTitle" class="form-control" placeholder="e.g. CIT 401 Past Questions 2024" required>
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label">Level *</label>
+              <select id="uLevel" class="form-select" required>
+                <option value="">Select Level</option>
+                <option value="100">100 Level</option>
+                <option value="200">200 Level</option>
+                <option value="300">300 Level</option>
+                <option value="400">400 Level</option>
+                <option value="500">500 Level</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label">Course Code *</label>
+              <input type="text" id="uCourse" class="form-control" placeholder="e.g. CIT 401" required>
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label">Course Name *</label>
+              <input type="text" id="uCourseName" class="form-control" placeholder="e.g. Artificial Intelligence" required>
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label">Category *</label>
+              <select id="uCat" class="form-select" required>
+                <option value="">Select Category</option>
+                <option value="past_question">Past Question</option>
+                <option value="lecture_note">Lecture Note</option>
+                <option value="textbook">Textbook</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Tags <span style="color:#7c6fa0;font-weight:400;">(comma separated — helps AI recommend this material)</span></label>
+              <input type="text" id="uTags" class="form-control" placeholder="e.g. machine learning, neural networks, 400 level">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description *</label>
+              <textarea id="uDesc" class="form-control" rows="3" placeholder="Brief description of the material" required></textarea>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Upload File * <span style="color:#7c6fa0;font-weight:400;">(PDF, DOCX, PPTX, JPG, PNG — max 50MB)</span></label>
+              <input type="file" id="uFile" class="form-control" accept=".pdf,.docx,.pptx,.jpg,.jpeg,.png,.gif,.webp" required>
+            </div>
+            <div class="col-12">
+              <button type="submit" id="uBtn" class="s-btn"><i class="bi bi-cloud-upload me-1"></i>Upload Resource</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ═══ MATERIALS ═══ -->
+    <div id="t-materials" style="display:none;">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div><h5 class="fw-bold mb-1" style="color:#2d1b5e;">All Materials</h5><p style="color:#7c6fa0;font-size:0.88rem;margin:0;">Manage uploaded academic resources.</p></div>
+        <div class="d-flex gap-2">
+          <input type="text" id="matSearch" class="form-control form-control-sm" style="width:180px;" placeholder="Search..." oninput="filterMats()">
+          <button onclick="sw('upload')" class="s-btn s-btn-sm"><i class="bi bi-plus-lg me-1"></i>Upload</button>
+        </div>
+      </div>
+      <div class="s-card">
+        <div class="table-responsive">
+          <table class="table s-table mb-0">
+            <thead><tr><th>Title</th><th>Course</th><th>Level</th><th>Category</th><th>Type</th><th class="d-none d-md-table-cell">Date</th><th></th></tr></thead>
+            <tbody id="matBody"><tr><td colspan="7" class="text-center py-4"><div class="spinner-border spinner-border-sm s-spin"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ GENERATE QUIZ ═══ -->
+    <div id="t-generate" style="display:none;">
+      <div class="mb-4">
+        <h5 class="fw-bold mb-1" style="color:#2d1b5e;"><span class="ai-pill me-2">AI</span>Generate Quiz</h5>
+        <p style="color:#7c6fa0;font-size:0.88rem;margin:0;">Fill in the course details and Gemini AI will create quiz questions automatically.</p>
+      </div>
+      <div class="row g-3">
+        <!-- Form -->
+        <div class="col-12 col-lg-5">
+          <div class="s-card">
+            <h6 class="fw-bold mb-3" style="color:#2d1b5e;">Course Details</h6>
+            <div class="mb-3"><label class="form-label">Quiz Title</label><input type="text" id="qTitle" class="form-control" placeholder="e.g. CIT 401 Practice Quiz"></div>
+            <div class="mb-3"><label class="form-label">Course Code *</label><input type="text" id="qCourse" class="form-control" placeholder="e.g. CIT 401"></div>
+            <div class="mb-3"><label class="form-label">Course Name *</label><input type="text" id="qCName" class="form-control" placeholder="e.g. Artificial Intelligence"></div>
+            <div class="mb-3"><label class="form-label">Level *</label>
+              <select id="qLevel" class="form-select">
+                <option value="">Select Level</option>
+                <option value="100">100 Level</option>
+                <option value="200">200 Level</option>
+                <option value="300">300 Level</option>
+                <option value="400">400 Level</option>
+                <option value="500">500 Level</option>
+              </select>
+            </div>
+            <div class="mb-3"><label class="form-label">Number of Questions</label>
+              <select id="qNum" class="form-select"><option value="5">5 Questions</option><option value="10" selected>10 Questions</option><option value="15">15 Questions</option><option value="20">20 Questions</option></select>
+            </div>
+            <div class="mb-4"><label class="form-label">Topics to Cover * <span style="color:#7c6fa0;font-weight:400;">(comma separated)</span></label>
+              <textarea id="qTopics" class="form-control" rows="3" placeholder="e.g. machine learning, neural networks, search algorithms"></textarea>
+            </div>
+            <button onclick="generateQuiz()" id="genBtn" class="s-btn w-100" style="justify-content:center;padding:12px;"><i class="bi bi-stars me-2"></i>Generate Quiz with AI</button>
+          </div>
+        </div>
+        <!-- Preview -->
+        <div class="col-12 col-lg-7">
+          <div class="s-card" style="min-height:420px;">
+            <div id="qPreview">
+              <div class="s-empty" style="padding:48px;">
+                <i class="bi bi-robot"></i>
+                <p class="fw-semibold mb-1">AI Quiz Preview</p>
+                <p style="font-size:0.84rem;">Fill the form and click Generate.<br>Gemini will create questions here.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ QUIZZES ═══ -->
+    <div id="t-quizzes" style="display:none;">
+      <div class="mb-4"><h5 class="fw-bold mb-1" style="color:#2d1b5e;">All Quizzes</h5><p style="color:#7c6fa0;font-size:0.88rem;margin:0;">Manage AI-generated quizzes for students.</p></div>
+      <div id="quizzesList"><div class="text-center py-5"><div class="spinner-border spinner-border-sm s-spin"></div></div></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="api.js"></script>
+<script src="app.js"></script>
+<script>
+requireAdmin();
+
+const TABS = ['overview','upload','materials','generate','quizzes'];
+let allMats = [], genQuizData = null;
+
+function sw(name) {
+  TABS.forEach(t => {
+    document.getElementById(`t-${t}`).style.display = 'none';
+    const sl = document.getElementById(`sl-${t}`);
+    const nl = document.getElementById(`nl-${t}`);
+    if (sl) sl.classList.remove('active');
+    if (nl) nl.classList.remove('active');
+  });
+  document.getElementById(`t-${name}`).style.display = 'block';
+  const sl = document.getElementById(`sl-${name}`);
+  const nl = document.getElementById(`nl-${name}`);
+  if (sl) sl.classList.add('active');
+  if (nl) nl.classList.add('active');
+  if (name === 'materials') loadMats();
+  if (name === 'quizzes') loadQuizzes();
+  if (name === 'overview') loadOverview();
+}
+
+// Check URL hash for direct tab links
+window.addEventListener('load', () => {
+  const h = window.location.hash.replace('#','');
+  if (TABS.includes(h)) sw(h);
+});
+
+async function loadOverview() {
+  try {
+    const [m, s, q] = await Promise.all([adminGetMaterials(), adminGetStudents(), adminGetQuizzes()]);
+    document.getElementById('ovRes').textContent = m.count;
+    document.getElementById('ovStu').textContent = s.count;
+    document.getElementById('ovQuiz').textContent = q.count;
+    allMats = m.materials || [];
+    const r = allMats.slice(0,5);
+    document.getElementById('ovRecent').innerHTML = r.length
+      ? r.map(m => `<div class="mat-row"><div style="flex:1;min-width:0;"><div class="fw-bold text-truncate" style="font-size:0.87rem;">${m.title}</div><div style="color:#7c6fa0;font-size:0.78rem;">${m.course} • ${m.level} Level • ${m.category.replace('_',' ')}</div></div><span style="color:#7c6fa0;font-size:0.78rem;white-space:nowrap;flex-shrink:0;">${new Date(m.createdAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span></div>`).join('')
+      : '<div class="s-empty" style="padding:20px;"><i class="bi bi-folder2-open"></i><p>No materials uploaded yet.</p></div>';
+  } catch (e) { showAlert('Failed to load dashboard: ' + e.message, 'danger'); }
+}
+
+async function loadMats() {
+  if (!allMats.length) { try { const d = await adminGetMaterials(); allMats = d.materials || []; } catch (e) { return; } }
+  renderMats(allMats);
+}
+
+function renderMats(list) {
+  const tbody = document.getElementById('matBody');
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4" style="color:#7c6fa0;">No materials found.</td></tr>'; return; }
+  const fc = t => t==='pdf'?'ftype-pdf':t==='docx'?'ftype-docx':t==='pptx'?'ftype-pptx':['jpg','jpeg','png','gif','webp'].includes(t)?'ftype-img':'ftype-pdf';
+  tbody.innerHTML = list.map(m => `<tr>
+    <td class="fw-semibold" style="font-size:0.86rem;max-width:200px;"><span class="d-block text-truncate">${m.title}</span></td>
+    <td style="font-size:0.84rem;">${m.course}</td>
+    <td><span class="s-tag" style="font-size:0.74rem;">${m.level}L</span></td>
+    <td><span class="s-tag" style="font-size:0.74rem;">${m.category.replace('_',' ')}</span></td>
+    <td><span class="ftype ${fc(m.fileType||'')}">${m.fileType||'?'}</span></td>
+    <td class="d-none d-md-table-cell" style="color:#7c6fa0;font-size:0.8rem;">${new Date(m.createdAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'2-digit'})}</td>
+    <td><button onclick="delMat('${m._id}')" style="width:30px;height:30px;border-radius:7px;border:none;background:#fee2e2;color:#dc3545;cursor:pointer;display:flex;align-items:center;justify-content:center;"><i class="bi bi-trash" style="font-size:0.82rem;"></i></button></td>
+  </tr>`).join('');
+}
+
+function filterMats() {
+  const q = document.getElementById('matSearch').value.toLowerCase();
+  renderMats(allMats.filter(m => m.title.toLowerCase().includes(q) || m.course.toLowerCase().includes(q) || m.courseName.toLowerCase().includes(q)));
+}
+
+async function delMat(id) {
+  if (!confirm('Delete this material? This cannot be undone.')) return;
+  try { await adminDeleteMaterial(id); showAlert('Material deleted.'); allMats = []; loadMats(); loadOverview(); } catch (e) { showAlert(e.message, 'danger'); }
+}
+
+document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('uBtn'), orig = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Uploading...';
+  try {
+    const fd = new FormData();
+    fd.append('title', document.getElementById('uTitle').value);
+    fd.append('description', document.getElementById('uDesc').value);
+    fd.append('course', document.getElementById('uCourse').value.toUpperCase());
+    fd.append('courseName', document.getElementById('uCourseName').value);
+    fd.append('level', document.getElementById('uLevel').value);
+    fd.append('category', document.getElementById('uCat').value);
+    fd.append('tags', document.getElementById('uTags').value);
+    fd.append('department', 'Information Technology');
+    fd.append('file', document.getElementById('uFile').files[0]);
+    await adminUploadMaterial(fd);
+    showAlert('Material uploaded successfully!');
+    this.reset(); allMats = []; loadOverview();
+  } catch (e) { showAlert(e.message, 'danger'); }
+  finally { btn.disabled = false; btn.innerHTML = orig; }
+});
+
+async function generateQuiz() {
+  const course = document.getElementById('qCourse').value.trim();
+  const cname = document.getElementById('qCName').value.trim();
+  const level = document.getElementById('qLevel').value;
+  const topics = document.getElementById('qTopics').value.trim();
+  const num = document.getElementById('qNum').value;
+  const title = document.getElementById('qTitle').value.trim();
+  if (!course || !cname || !level || !topics) { showAlert('Please fill in Course Code, Name, Level and Topics.', 'warning'); return; }
+  const btn = document.getElementById('genBtn'), orig = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Generating...';
+  document.getElementById('qPreview').innerHTML = `<div style="text-align:center;padding:48px 20px;"><div class="gen-ring"></div><p class="fw-semibold mb-1" style="color:#2d1b5e;">Gemini is generating your quiz...</p><p style="color:#7c6fa0;font-size:0.84rem;">Creating ${num} questions on ${cname}</p></div>`;
+  try {
+    const d = await adminGenerateQuiz({ title: title||`${cname} Quiz`, course, courseName: cname, level, topics, numQuestions: Number(num), department: 'Information Technology' });
+    genQuizData = d.quiz;
+    document.getElementById('qPreview').innerHTML = `
+      <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+        <div><div class="fw-bold" style="color:#2d1b5e;">${d.quiz.title}</div><small style="color:#7c6fa0;">${d.quiz.course} • ${d.quiz.level} Level • ${d.quiz.questions.length} Questions</small></div>
+        <div class="d-flex gap-2"><button onclick="generateQuiz()" class="s-btn-out" style="padding:6px 12px;font-size:0.8rem;"><i class="bi bi-arrow-clockwise me-1"></i>Regenerate</button><button onclick="saveQuiz()" id="saveBtn" class="s-btn s-btn-sm"><i class="bi bi-check-lg me-1"></i>Save Quiz</button></div>
+      </div>
+      <div style="max-height:460px;overflow-y:auto;padding-right:4px;">
+        ${d.quiz.questions.map((q, i) => `
+          <div class="preview-q">
+            <div class="qnum">Question ${i+1} <span class="s-tag" style="font-size:0.7rem;margin-left:6px;">${q.topic}</span></div>
+            <div class="qtext">${q.questionText}</div>
+            <div>${q.options.map(o => `<span class="opt-badge ${o===q.correctAnswer?'correct':''}">${o===q.correctAnswer?'✓ ':''}${o}</span>`).join('')}</div>
+          </div>`).join('')}
+      </div>`;
+    showAlert(`${d.quiz.questions.length} questions generated! Review and save.`);
+  } catch (e) {
+    showAlert(e.message, 'danger');
+    document.getElementById('qPreview').innerHTML = '<div class="s-empty" style="padding:48px;"><i class="bi bi-exclamation-triangle" style="color:#dc3545;"></i><p>Generation failed. Please try again.</p></div>';
+  } finally { btn.disabled = false; btn.innerHTML = orig; }
+}
+
+async function saveQuiz() {
+  if (!genQuizData) return;
+  showAlert('Quiz saved! Students can now take it.');
+  genQuizData = null;
+  document.getElementById('qTitle').value = '';
+  document.getElementById('qCourse').value = '';
+  document.getElementById('qCName').value = '';
+  document.getElementById('qLevel').value = '';
+  document.getElementById('qTopics').value = '';
+  document.getElementById('qPreview').innerHTML = `<div class="s-empty" style="padding:48px;"><i class="bi bi-check-circle-fill" style="color:#16a34a;opacity:1;font-size:2.5rem;"></i><p class="fw-semibold" style="color:#16a34a;">Quiz saved successfully!</p><p style="font-size:0.84rem;">Generate another or view all quizzes.</p></div>`;
+  loadOverview();
+}
+
+async function loadQuizzes() {
+  try {
+    const d = await adminGetQuizzes();
+    const c = document.getElementById('quizzesList');
+    if (!d.quizzes?.length) {
+      c.innerHTML = `<div class="s-card"><div class="s-empty"><i class="bi bi-journal-x"></i><p class="fw-semibold mb-1">No quizzes yet</p><p style="font-size:0.84rem;">Use the AI generator to create your first quiz.</p><button onclick="sw('generate')" class="s-btn s-btn-sm mt-2">Generate Quiz</button></div></div>`;
+      return;
+    }
+    c.innerHTML = d.quizzes.map(q => `
+      <div class="quiz-row">
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1"><span class="fw-bold" style="color:#2d1b5e;font-size:0.9rem;">${q.title}</span><span class="ai-pill">AI</span></div>
+          <small style="color:#7c6fa0;">${q.course} — ${q.courseName} • ${q.level} Level • ${q.questions?.length||0} Questions</small>
+        </div>
+        <span class="s-tag" style="flex-shrink:0;font-size:0.74rem;">${new Date(q.createdAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}</span>
+      </div>`).join('');
+  } catch (e) { showAlert('Failed to load quizzes', 'danger'); }
+}
+
+document.addEventListener('DOMContentLoaded', loadOverview);
+</script>
+</body>
+</html>

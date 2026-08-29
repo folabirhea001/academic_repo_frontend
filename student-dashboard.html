@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — SMART Academic Repository</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="s-nav">
+  <button class="s-toggler d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#mob-sb" title="Open menu" aria-label="Open menu"><i class="bi bi-list"></i></button>
+  <a href="index.html" class="s-brand"><img src="/frontend/logo.png" alt="logo" width="50"><span class="d-none d-sm-inline">SMART Academic Repository</span><span class="d-sm-none">SMART Repo</span></a>
+  <div class="s-right">
+    <span class="s-user d-none d-md-inline"><i class="bi bi-person-circle me-1"></i><span id="navName"></span></span>
+    <button class="s-btn-nav" onclick="logout()"><i class="bi bi-box-arrow-right"></i><span class="d-none d-sm-inline ms-1">Logout</span></button>
+  </div>
+</nav>
+
+<div class="offcanvas offcanvas-start s-offcanvas" tabindex="-1" id="mob-sb">
+  <div class="offcanvas-header"><h6 class="text-white fw-bold mb-0"><i class="bi bi-mortarboard-fill me-2"></i>Menu</h6><button type="button" class="btn-close" data-bs-dismiss="offcanvas" title="Close menu" aria-label="Close menu"></button></div>
+  <div class="offcanvas-body p-2">
+    <span class="s-label">Main</span>
+    <a href="student-dashboard.html" class="s-link active"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <a href="search-results.html" class="s-link"><i class="bi bi-search"></i>Browse Materials</a>
+    <span class="s-label">AI Tools</span>
+    <a href="recommendation.html" class="s-link"><i class="bi bi-stars"></i>AI Recommendations</a>
+    <span class="s-label">Assessments</span>
+    <a href="self-test.html" class="s-link"><i class="bi bi-pencil-square"></i>Self-Test Quiz</a>
+    <span class="s-label">Account</span>
+    <a href="profile.html" class="s-link"><i class="bi bi-person-circle"></i>My Profile</a>
+    <a href="#" onclick="logout()" class="s-link s-danger"><i class="bi bi-box-arrow-right"></i>Logout</a>
+  </div>
+</div>
+
+<div class="s-layout">
+  <aside class="s-sidebar">
+    <span class="s-label">Main</span>
+    <a href="student-dashboard.html" class="s-link active"><i class="bi bi-speedometer2"></i>Dashboard</a>
+    <a href="search-results.html" class="s-link"><i class="bi bi-search"></i>Browse Materials</a>
+    <span class="s-label">AI Tools</span>
+    <a href="recommendation.html" class="s-link"><i class="bi bi-stars"></i>AI Recommendations</a>
+    <span class="s-label">Assessments</span>
+    <a href="self-test.html" class="s-link"><i class="bi bi-pencil-square"></i>Self-Test Quiz</a>
+    <span class="s-label">Account</span>
+    <a href="profile.html" class="s-link"><i class="bi bi-person-circle"></i>My Profile</a>
+    <a href="#" onclick="logout()" class="s-link s-danger"><i class="bi bi-box-arrow-right"></i>Logout</a>
+  </aside>
+
+  <main class="s-main">
+
+    <!-- Welcome Banner -->
+    <div class="s-banner">
+      <h5 class="fw-bold mb-1" style="color:white;">Good day, <span id="welcomeName">Student</span>! 👋</h5>
+      <p class="mb-3" style="color:rgba(255,255,255,0.72);font-size:0.88rem;">Your personalised academic assistant is ready. <span id="lvlBadge"></span></p>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="self-test.html" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:9px;padding:7px 16px;font-size:0.84rem;font-weight:600;text-decoration:none;"><i class="bi bi-pencil-square me-1"></i>Take a Quiz</a>
+        <a href="recommendation.html" style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:9px;padding:7px 16px;font-size:0.84rem;font-weight:600;text-decoration:none;"><i class="bi bi-stars me-1"></i>AI Recommendations</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-3">
+      <div class="col-4"><div class="s-stat"><div class="si"><i class="bi bi-file-earmark-text"></i></div><h3 id="sMat">--</h3><p>Materials</p></div></div>
+      <div class="col-4"><div class="s-stat"><div class="si"><i class="bi bi-patch-question"></i></div><h3 id="sQuiz">--</h3><p>Quizzes</p></div></div>
+      <div class="col-4"><div class="s-stat"><div class="si"><i class="bi bi-graph-up"></i></div><h3 id="sScore">--</h3><p>Avg. Score</p></div></div>
+    </div>
+
+    <!-- Quick Actions + Recent Activity -->
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-md-6">
+        <div class="s-card h-100">
+          <h6 class="fw-bold mb-3" style="color:#2d1b5e;">Quick Actions</h6>
+          <a href="search-results.html" class="s-action"><div class="s-ico"><i class="bi bi-search"></i></div><div><div class="fw-bold" style="font-size:0.88rem;">Search Materials</div><div style="color:#7c6fa0;font-size:0.78rem;">Notes, textbooks, past questions</div></div></a>
+          <a href="self-test.html" class="s-action"><div class="s-ico"><i class="bi bi-pencil-square"></i></div><div><div class="fw-bold" style="font-size:0.88rem;">Take Self-Test</div><div style="color:#7c6fa0;font-size:0.78rem;">AI identifies your weak areas</div></div></a>
+          <a href="recommendation.html" class="s-action"><div class="s-ico"><i class="bi bi-robot"></i></div><div><div class="fw-bold" style="font-size:0.88rem;">Chat with AI</div><div style="color:#7c6fa0;font-size:0.78rem;">Ask academic questions</div></div></a>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <div class="s-card h-100">
+          <h6 class="fw-bold mb-3" style="color:#2d1b5e;">Recent Quiz Activity</h6>
+          <div id="recentActivity"><div class="text-center py-3"><div class="spinner-border spinner-border-sm s-spin"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weak Topics Alert -->
+    <div id="weakAlert" style="display:none;" class="mb-3 p-3 rounded-3" style="background:#fffbeb;border:1.5px solid #fde68a;">
+      <div class="d-flex gap-2 align-items-start">
+        <i class="bi bi-exclamation-triangle-fill mt-1" style="color:#d97706;flex-shrink:0;"></i>
+        <div>
+          <div class="fw-bold mb-1" style="color:#92400e;font-size:0.88rem;">Weak Areas Identified by AI</div>
+          <div id="weakInline" class="d-flex flex-wrap gap-1 mb-2"></div>
+          <a href="recommendation.html" style="color:#d97706;font-weight:600;font-size:0.83rem;text-decoration:none;">View recommended study materials →</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="api.js"></script>
+<script src="app.js"></script>
+<script>
+requireStudent();
+document.addEventListener('DOMContentLoaded', async () => {
+  const u = getUser();
+  const fn = u.fullName ? u.fullName.split(' ')[0] : 'Student';
+  document.getElementById('navName').textContent = fn;
+  document.getElementById('welcomeName').textContent = fn;
+  document.getElementById('lvlBadge').innerHTML = `<span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:20px;font-size:0.78rem;font-weight:700;">${u.level || ''} Level</span>`;
+
+  try {
+    const [m, q] = await Promise.all([getMaterials(), getQuizzes()]);
+    document.getElementById('sMat').textContent = m.count || 0;
+    document.getElementById('sQuiz').textContent = q.count || 0;
+  } catch { document.getElementById('sMat').textContent = '0'; document.getElementById('sQuiz').textContent = '0'; }
+
+  try {
+    const h = await getQuizHistory();
+    const a = h.attempts || [];
+    if (a.length > 0) {
+      const avg = Math.round(a.reduce((s, x) => s + (x.score / x.totalQuestions) * 100, 0) / a.length);
+      document.getElementById('sScore').textContent = avg + '%';
+      const weak = [...new Set(a.flatMap(x => x.weakTopics || []))];
+      if (weak.length) {
+        const el = document.getElementById('weakAlert');
+        el.style.background = '#fffbeb'; el.style.border = '1.5px solid #fde68a'; el.style.display = 'block';
+        document.getElementById('weakInline').innerHTML = weak.map(t => `<span class="s-tag s-tag-warn">${t}</span>`).join('');
+      }
+      document.getElementById('recentActivity').innerHTML = a.slice(0,4).map(x => {
+        const p = Math.round((x.score / x.totalQuestions) * 100);
+        const c = p >= 70 ? '#16a34a' : p >= 50 ? '#d97706' : '#dc3545';
+        return `<div class="d-flex justify-content-between align-items-center py-2" style="border-bottom:1px solid #f5f0ff;">
+          <div><div class="fw-semibold" style="font-size:0.85rem;">${x.quizId ? x.quizId.title : 'Quiz'}</div><div style="color:#7c6fa0;font-size:0.76rem;">${new Date(x.createdAt).toLocaleDateString('en-GB')}</div></div>
+          <span style="background:${c}20;color:${c};font-weight:700;padding:3px 10px;border-radius:8px;font-size:0.8rem;">${p}%</span>
+        </div>`;
+      }).join('');
+    } else {
+      document.getElementById('sScore').textContent = 'N/A';
+      document.getElementById('recentActivity').innerHTML = '<div class="s-empty" style="padding:20px;"><i class="bi bi-pencil-square"></i><p>No quizzes yet. <a href="self-test.html" style="color:#6f42c1;font-weight:600;">Take your first!</a></p></div>';
+    }
+  } catch { document.getElementById('sScore').textContent = 'N/A'; }
+});
+</script>
+</body>
+</html>
